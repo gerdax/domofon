@@ -7,7 +7,12 @@ test('dialing restarts 3 second timer; ringing ends after 12 seconds',()=>{const
 test('X cancels pending calls and active rings',()=>{for(const delay of [100,3100]){const s=setup();s.machine.press('7');s.tick(delay);s.machine.press('x');const count=s.sounds.length;s.tick(20000);assert.equal(s.view.text,'door');assert.equal(s.sounds.length,count);}});
 test('four digit limit and code mode have independent timers',()=>{const s=setup();for(const d of '12345')s.machine.press(d);assert.equal(s.view.text,'1234');s.machine.press('key');s.tick(4000);assert.equal(s.view.mode,'code');for(const d of '1234')s.machine.press(d);assert.equal(s.view.mode,'open');s.tick(120);assert.deepEqual(s.sounds,['open']);s.tick(2880);assert.equal(s.view.mode,'idle');});
 test('wrong code rejects and clears; X cancels delayed confirmation',()=>{const s=setup();s.machine.press('key');for(const d of '9999')s.machine.press(d);assert.equal(s.view.mode,'error');s.tick(120);assert.deepEqual(s.sounds,['error']);s.tick(1380);assert.equal(s.view.mode,'idle');s.machine.press('key');for(const d of '1234')s.machine.press(d);s.machine.reset();s.tick(10000);assert.deepEqual(s.sounds,['error']);});
-test('all 12 tones are distinct and inside requested range',()=>{const values=Object.values(frequencies);assert.equal(values.length,12);assert.equal(new Set(values).size,12);assert.ok(values.every(v=>v>=650&&v<=1800));});
+test('keypad follows requested A#5–G#6 notes, with 0 matching 1',()=>{
+  const expected={'1':932.327523,'2':987.766603,'3':1046.502261,'4':1108.730524,'5':1174.659072,'6':1244.507935,'7':1318.510228,'8':1396.912926,'9':1479.977691,'0':932.327523,key:1661.218790,x:1567.981744};
+  assert.deepEqual(Object.keys(frequencies).sort(),Object.keys(expected).sort());
+  for(const [key,hz] of Object.entries(expected))assert.ok(Math.abs(frequencies[key]-hz)<.000001,`Wrong note for ${key}`);
+  assert.equal(frequencies['0'],frequencies['1']);
+});
 test('browser timers are called without an Intercom receiver',t=>{
   let scheduled=0,cleared=0;
   t.mock.method(globalThis,'setTimeout',function(){assert.equal(this,undefined);scheduled++;return scheduled;});

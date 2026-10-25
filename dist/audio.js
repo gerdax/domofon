@@ -1,4 +1,8 @@
-export const frequencies = Object.freeze({'1':650,'2':713,'3':782,'4':858,'5':941,'6':1032,'7':1132,'8':1241,'9':1361,key:1493,'0':1638,x:1800});
+// Equal temperament, A4 = 440 Hz. 1 and 0 share A#5; B uses international notation.
+const midiNotes = {'1':82,'2':83,'3':84,'4':85,'5':86,'6':87,'7':88,'8':89,'9':90,'0':82,key:92,x:91};
+export const frequencies = Object.freeze(Object.fromEntries(
+  Object.entries(midiNotes).map(([key,note])=>[key,440*2**((note-69)/12)])
+));
 export class Sound {
   constructor(){this.context=null;this.muted=false;this.voices=new Set();}
   prepare(){
