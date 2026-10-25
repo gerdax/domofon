@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=15';
-import {Intercom} from './machine.js?v=15';
-import {bindKey} from './input.js?v=15';
+import {Sound} from './audio.js?v=16';
+import {Intercom} from './machine.js?v=16';
+import {bindKey} from './input.js?v=16';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.

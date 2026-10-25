@@ -1,0 +1,7 @@
+# Domofon app icon
+
+Source reference: user-supplied `reference_2.png`, key symbol in the bottom-left keypad position. Built-in imagegen used to reproduce the symbol, not a pixel-exact extraction. Original generated master is preserved as `key-icon-master.png`. Installable PNGs are downscaled from this master with Sharp.
+
+## Prompt
+
+Create one square 1024x1024 PWA app icon. Use the attached photograph as reference. Reproduce specifically the KEY SYMBOL printed on the bottom-left key of the keypad (bottom keypad row, left of 0, around x=715 y=620 in the 1116x944 photo). This is a horizontal key pointing right, a rounded irregular circular bow with a small circular hole, and short toothed shaft. Carefully match THIS PARTICULAR key's silhouette, hole, tooth pattern and horizontal orientation from the photograph, not a generic key or Unicode emoji. Isolate that exact key symbol visually and make it a crisp solid WHITE silhouette, retaining the dark circular hole through its head. Center this one symbol on a completely flat solid DARK GRAY #303030 square background, edge to edge. Key overall width about 64% of canvas, within central 72% safe circle. No text, no other elements from the photograph, no numerals, no intercom, no frame, no gradients, no shadows, no 3D, no texture, no rounded square drawn inside image. The only image contents must be the faithful reference key shape in white and the dark gray background. Asset for actual installation icon, clean readable at tiny sizes.
