@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Sound} from '../dist/audio.js';
-import {bindKey} from '../dist/input.js';
+import {bindKey,preventPinchZoom} from '../dist/input.js';
 
 function engine(state='suspended'){
   let resolve;const calls=[];
@@ -18,6 +18,14 @@ test('first gesture schedules the complete 100ms tone before resume resolves',as
   assert.deepEqual(e.calls,['resume','start',['stop',.1]]);
   assert.equal(e.sound.voices.size,1);e.resume();await pending;
   assert.equal(e.sound.voices.size,1);
+});
+test('pinch gestures are blocked while ordinary one-finger taps stay available',()=>{
+  const target=new EventTarget();preventPinchZoom(target);
+  function fire(type,touches){const event=new Event(type,{cancelable:true});if(touches!==undefined)event.touches=Array(touches).fill({});target.dispatchEvent(event);return event.defaultPrevented;}
+  for(const type of ['gesturestart','gesturechange','gestureend'])assert.equal(fire(type),true);
+  for(const type of ['touchstart','touchmove']){
+    assert.equal(fire(type,1),false);assert.equal(fire(type,2),true);assert.equal(fire(type,3),true);
+  }
 });
 test('interrupted Safari audio resumes on the same gesture',async()=>{
   const e=engine('interrupted');const pending=e.sound.key('2');

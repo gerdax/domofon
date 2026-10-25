@@ -1,5 +1,5 @@
-const CACHE='domofon-v17';
-const ASSETS=['./','./index.html','./style.css?v=17','./app.js?v=17','./audio.js?v=17','./input.js?v=17','./machine.js?v=17','./manifest.webmanifest?v=17','./assets/panel.png','./assets/bg.png','./assets/key-icon-180.png','./assets/key-icon-192.png','./assets/key-icon-512.png'];
+const CACHE='domofon-v18';
+const ASSETS=['./','./index.html','./style.css?v=18','./app.js?v=18','./audio.js?v=18','./input.js?v=18','./machine.js?v=18','./manifest.webmanifest?v=18','./assets/panel.png','./assets/bg.png','./assets/key-icon-180.png','./assets/key-icon-192.png','./assets/key-icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(path=>new Request(path,{cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('domofon-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).catch(()=>event.request.mode==='navigate'?caches.match('./index.html'):Response.error())));});
