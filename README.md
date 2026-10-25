@@ -8,8 +8,8 @@ W katalogu projektu: `python3 -m http.server 8080 --directory dist`, następnie 
 
 ## Obsługa
 
-- Cyfry wybierają lokal; po 3 sekundach ciszy rozpoczyna się 12-sekundowe wywołanie.
-- X / Escape / Backspace kasuje wpis lub anuluje wywołanie.
+- Cyfry zostają na wyświetlaczu; dzwonienie do lokalu jest na razie wyłączone.
+- X / Escape / Backspace kasuje wpis.
 - Kluczyk / Enter rozpoczyna wpisywanie kodu. Demonstracyjny kod: **1234**.
 - Przyciski grają przez 100 ms: 1=A♯5, 2=B5, 3=C6, 4=C♯6, 5=D6, 6=D♯6, 7=E6, 8=F6, 9=F♯6, 0=A♯5, klucz=G♯6, X=G6. Strój równomierny, A4=440 Hz; B w notacji międzynarodowej. Dźwięki są syntetyczną interpretacją, nie nagraniem urządzenia.
 - Pomoc i wyciszenie w prawym dolnym rogu. Aplikacja nie łączy się z fizycznym domofonem.
