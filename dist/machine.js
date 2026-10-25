@@ -3,7 +3,7 @@ export class Intercom {
   later(fn,ms){const id=this.setTimer(()=>{this.timers.delete(id);fn();},ms);this.timers.add(id);}
   clear(){for(const id of this.timers)this.clearTimer(id);this.timers.clear();}
   show(text,message,calling=false){this.render({text,message,calling,mode:this.mode});}
-  reset(){this.clear();this.stop();this.mode='idle';this.digits='';this.codeKeys=[];this.apartment='';this.show('door','Domofon gotowy.');}
+  reset(){this.clear();this.stop();this.mode='idle';this.digits='';this.codeKeys=[];this.apartment='';this.show('.','Domofon gotowy.');}
   press(key){
     if(key==='x'){this.reset();return 'x';}
     if(this.mode==='code'&&(key==='key'||/^\d$/.test(key))){

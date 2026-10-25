@@ -4,7 +4,7 @@ import {Intercom} from '../dist/machine.js';
 import {frequencies} from '../dist/audio.js';
 function setup(){let now=0,id=0,last;const jobs=new Map(),sounds=[];const machine=new Intercom({render:v=>last=v,play:v=>sounds.push(v),stop:()=>{},setTimer:(fn,delay)=>{jobs.set(++id,{fn,at:now+delay});return id;},clearTimer:id=>jobs.delete(id)});return {machine,sounds,get view(){return last;},tick(ms){const end=now+ms;while(true){const next=[...jobs].filter(([,j])=>j.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;now=next[1].at;jobs.delete(next[0]);next[1].fn();}now=end;}};}
 test('digits remain on display without calling or ringing after inactivity',()=>{const s=setup();s.machine.press('1');s.tick(2900);s.machine.press('2');s.tick(30000);assert.equal(s.view.mode,'dialing');assert.equal(s.view.text,'12');assert.equal(s.machine.timers.size,0);assert.deepEqual(s.sounds,[]);s.machine.press('3');assert.equal(s.view.text,'123');});
-test('X clears displayed digits after inactivity',()=>{const s=setup();s.machine.press('7');s.tick(30000);s.machine.press('x');s.tick(20000);assert.equal(s.view.text,'door');assert.deepEqual(s.sounds,[]);});
+test('X clears displayed digits after inactivity',()=>{const s=setup();s.machine.press('7');s.tick(30000);s.machine.press('x');s.tick(20000);assert.equal(s.view.text,'.');assert.deepEqual(s.sounds,[]);});
 test('four digit limit and code mode have independent timers',()=>{const s=setup();for(const d of '12345')s.machine.press(d);assert.equal(s.view.text,'1234');s.machine.press('key');s.tick(4000);assert.equal(s.view.mode,'code');for(const d of '1234')s.machine.press(d);assert.equal(s.view.mode,'open');s.tick(120);assert.deepEqual(s.sounds,['open']);s.tick(2880);assert.equal(s.view.mode,'idle');});
 test('wrong code rejects and clears; X cancels delayed confirmation',()=>{const s=setup();s.machine.press('key');for(const d of '9999')s.machine.press(d);assert.equal(s.view.mode,'error');s.tick(120);assert.deepEqual(s.sounds,['error']);s.tick(1380);assert.equal(s.view.mode,'idle');s.machine.press('key');for(const d of '1234')s.machine.press(d);s.machine.reset();s.tick(10000);assert.deepEqual(s.sounds,['error']);});
 test('keypad follows requested A#5–G#6 notes, with 0 matching 1',()=>{
@@ -48,3 +48,5 @@ test('key can interrupt open or error feedback and starts a new four-key sequenc
     assert.equal(s.machine.codeKeys.length,0);s.tick(10000);assert.equal(s.view.mode,'code');assert.deepEqual(s.sounds,[]);
   }
 });
+
+test('idle shows only a dot; door is reserved for a successful code',()=>{const s=setup();assert.equal(s.view.text,'.');s.machine.press('6');s.machine.press('key');for(const digit of '2901')s.machine.press(digit);assert.equal(s.view.text,'door');s.tick(3000);assert.equal(s.view.text,'.');s.machine.press('key');for(const digit of '9999')s.machine.press(digit);assert.equal(s.view.text,'Err');s.tick(1500);assert.equal(s.view.text,'.');});

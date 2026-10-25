@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=11';
-import {Intercom} from './machine.js?v=11';
-import {bindKey} from './input.js?v=11';
+import {Sound} from './audio.js?v=12';
+import {Intercom} from './machine.js?v=12';
+import {bindKey} from './input.js?v=12';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.
@@ -9,7 +9,7 @@ const paths=['12,4 48,4 43,11 16,11','49,6 53,10 48,43 43,47 40,41 44,14','43,51
 const glyphs={'0':[0,1,2,3,4,5],'1':[1,2],'2':[0,1,6,4,3],'3':[0,1,2,3,6],'4':[5,6,1,2],'5':[0,5,6,2,3],'6':[0,5,6,4,2,3],'7':[0,1,2],'8':[0,1,2,3,4,5,6],'9':[0,1,2,3,5,6],d:[1,2,3,4,6],o:[2,3,4,6],r:[4,6],E:[0,5,6,4,3],'-':[6],' ':[]};
 function render({text,message,calling}){
   const chars=text.padStart(4,' ').slice(-4).split('');
-  $('display').innerHTML=chars.map((c,i)=>`<g transform="translate(${8+i*76} 5) skewX(-5)">${paths.map((p,s)=>`<polygon class="${(glyphs[c]||[]).includes(s)?'lit':'unlit'}" points="${p}"/>`).join('')}</g>`).join('');
+  $('display').innerHTML=chars.map((c,i)=>`<g transform="translate(${8+i*76} 5) skewX(-5)">${paths.map((p,s)=>`<polygon class="${(glyphs[c]||[]).includes(s)?'lit':'unlit'}" points="${p}"/>`).join('')}${c==='.'?'<circle class="lit" cx="62" cy="94" r="4"/>':''}</g>`).join('');
   $('display').classList.toggle('calling',calling);$('status').textContent=message;
 }
 const machine=new Intercom({render,stop:()=>sound.stop(),play:kind=>{
