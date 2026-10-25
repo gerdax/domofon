@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=12';
-import {Intercom} from './machine.js?v=12';
-import {bindKey} from './input.js?v=12';
+import {Sound} from './audio.js?v=13';
+import {Intercom} from './machine.js?v=13';
+import {bindKey} from './input.js?v=13';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.
@@ -10,7 +10,7 @@ const glyphs={'0':[0,1,2,3,4,5],'1':[1,2],'2':[0,1,6,4,3],'3':[0,1,2,3,6],'4':[5
 function render({text,message,calling}){
   const chars=text.padStart(4,' ').slice(-4).split('');
   $('display').innerHTML=chars.map((c,i)=>`<g transform="translate(${8+i*76} 5) skewX(-5)">${paths.map((p,s)=>`<polygon class="${(glyphs[c]||[]).includes(s)?'lit':'unlit'}" points="${p}"/>`).join('')}${c==='.'?'<circle class="lit" cx="62" cy="94" r="4"/>':''}</g>`).join('');
-  $('display').classList.toggle('calling',calling);$('status').textContent=message;
+  $('display').classList.toggle('calling',calling);$('display').classList.toggle('idle',text==='.');$('status').textContent=message;
 }
 const machine=new Intercom({render,stop:()=>sound.stop(),play:kind=>{
   if(kind==='open')sound.tone(190,.6,'sawtooth',.05);

@@ -3,6 +3,7 @@
 .panel{position:relative;width:min(100vw,calc(100dvh * 1116 / 944));aspect-ratio:1116/944;flex:none;user-select:none;-webkit-user-select:none}
 .photograph{display:block;width:100%;height:100%;pointer-events:none}.display{position:absolute;left:13.35%;top:22.25%;width:26.95%;height:11.9%;background:#050505;border-radius:2%;filter:drop-shadow(0 0 2px #000)}
 .display.calling{animation:pulse 1s steps(2,end) infinite}.display .lit{fill:#d50043;filter:drop-shadow(0 0 1.5px #c9003a)}.display .unlit{fill:#1b0710}
+.display.idle .unlit{visibility:hidden}
 .keypad{position:absolute;left:59%;top:29%;width:27%;height:42%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)}
 .key{appearance:none;background:transparent;border:0;border-radius:18%;padding:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.key:focus-visible{outline:2px solid #e7a6b9;outline-offset:-4px}.key.pressed{background:radial-gradient(ellipse,#edbec51f,transparent 70%);box-shadow:inset 0 0 14px #0003}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
