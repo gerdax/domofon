@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=10';
-import {Intercom} from './machine.js?v=10';
-import {bindKey} from './input.js?v=10';
+import {Sound} from './audio.js?v=11';
+import {Intercom} from './machine.js?v=11';
+import {bindKey} from './input.js?v=11';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.
@@ -13,7 +13,7 @@ function render({text,message,calling}){
   $('display').classList.toggle('calling',calling);$('status').textContent=message;
 }
 const machine=new Intercom({render,stop:()=>sound.stop(),play:kind=>{
-  if(kind==='open')sound.tone(95,2.7,'sawtooth',.05);
+  if(kind==='open')sound.tone(190,.6,'sawtooth',.05);
   if(kind==='error')sound.tone(220,.4,'square',.035);
 }});
 const keys=['1','2','3','4','5','6','7','8','9','key','0','x'];
