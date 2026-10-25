@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#151515">
+  <meta name="description" content="Dotknij klawiatury. Interaktywny domofon z dźwiękami, dostępny także offline.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Domofon</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main aria-label="Interaktywny domofon">
+    <div class="panel" id="panel">
+      <img class="photograph" src="./assets/panel.png" alt="Czarny panel domofonu Proel KDC 1905M" draggable="false" width="1116" height="944">
+      <svg id="display" class="display" viewBox="0 0 310 120" aria-hidden="true"></svg>
+      <div id="keypad" class="keypad" role="group" aria-label="Klawiatura domofonu"></div>
+    </div>
+    <p id="status" class="sr-only" role="status" aria-live="polite">Domofon gotowy.</p>
+  </main>
+  <nav class="tools" aria-label="Opcje">
+    <button id="mute" aria-label="Wycisz dźwięk" aria-pressed="false" title="Dźwięk">♪</button>
+    <button id="help" aria-label="Pomoc" title="Pomoc">?</button>
+  </nav>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <button class="close" id="close-help" aria-label="Zamknij pomoc">×</button>
+    <p class="eyebrow">KDC 1905M · SYMULATOR</p>
+    <h1 id="help-title">Kto tam?</h1>
+    <p>Wybierz numer lokalu. Po 3 sekundach domofon zadzwoni. Każdy przycisk ma swój dźwięk.</p>
+    <dl><dt>×</dt><dd>Kasuje wpis i przerywa dzwonienie.</dd><dt>Kluczyk</dt><dd>Włącza wpisywanie kodu. Spróbuj <strong>1234</strong>.</dd><dt>Klawiatura</dt><dd>Cyfry 0–9, Enter = kluczyk, Escape lub Backspace = ×.</dd></dl>
+    <p class="small">Zainstaluj aplikację z menu przeglądarki. Na iPhonie: Udostępnij → Do ekranu początkowego. Po pierwszej wizycie działa również offline.</p>
+    <button id="install" hidden>Zainstaluj aplikację</button>
+  </dialog>
+  <noscript>Włącz JavaScript, aby korzystać z klawiatury i dźwięków domofonu.</noscript>
+</body>
+</html>
