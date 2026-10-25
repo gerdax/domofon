@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=8';
-import {Intercom} from './machine.js?v=8';
-import {bindKey} from './input.js?v=8';
+import {Sound} from './audio.js?v=9';
+import {Intercom} from './machine.js?v=9';
+import {bindKey} from './input.js?v=9';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.
@@ -18,7 +18,7 @@ const machine=new Intercom({render,stop:()=>sound.stop(),play:kind=>{
 }});
 const keys=['1','2','3','4','5','6','7','8','9','key','0','x'];
 const buttons=new Map();
-function activate(key){machine.press(key);sound.key(key);const button=buttons.get(key);button.classList.add('pressed');setTimeout(()=>button.classList.remove('pressed'),120);}
+function activate(key){const toneKey=machine.press(key);sound.key(toneKey);const button=buttons.get(key);button.classList.add('pressed');setTimeout(()=>button.classList.remove('pressed'),120);}
 for(const key of keys){const b=document.createElement('button');b.type='button';b.className='key';b.dataset.key=key;b.setAttribute('aria-label',key==='key'?'Kluczyk — wpisz kod':key==='x'?'Anuluj':key);bindKey(b,()=>activate(key),()=>{if(!sound.muted)void sound.unlock();});$('keypad').append(b);buttons.set(key,b);}
 const held=new Set();
 document.addEventListener('keydown',e=>{

@@ -21,3 +21,30 @@ test('browser timers are called without an Intercom receiver',t=>{
   machine.press('key');for(const digit of '1234')machine.press(digit);assert.equal(scheduled,2);
   machine.press('x');assert.equal(cleared,2);
 });
+test('exactly four keys after the key button share its tone, including repeated key buttons',()=>{
+  const s=setup();assert.equal(s.machine.press('key'),'key');
+  for(const key of ['1','key','0','key'])assert.equal(s.machine.press(key),'key');
+  assert.equal(s.view.mode,'error');assert.equal(s.machine.codeKeys.length,4);
+  assert.equal(s.machine.press('7'),'7');
+});
+test('X immediately cancels the shared tone and resets code progress',()=>{
+  const s=setup();s.machine.press('key');assert.equal(s.machine.press('2'),'key');
+  assert.equal(s.machine.press('x'),'x');assert.equal(s.machine.press('2'),'2');
+  assert.equal(s.view.mode,'dialing');assert.equal(s.view.text,'2');
+  s.machine.press('key');assert.equal(s.machine.codeKeys.length,0);
+});
+test('6 then key then 2901 opens the door; a different or missing apartment does not',()=>{
+  for(const apartment of ['6','5','']){
+    const s=setup();if(apartment)s.machine.press(apartment);s.machine.press('key');
+    for(const digit of '2901')assert.equal(s.machine.press(digit),'key');
+    assert.equal(s.view.mode,apartment==='6'?'open':'error');
+    s.tick(120);assert.deepEqual(s.sounds,[apartment==='6'?'open':'error']);
+  }
+});
+test('key can interrupt open or error feedback and starts a new four-key sequence',()=>{
+  for(const code of ['1234','9999']){
+    const s=setup();s.machine.press('key');for(const digit of code)s.machine.press(digit);
+    assert.equal(s.machine.press('key'),'key');assert.equal(s.view.mode,'code');
+    assert.equal(s.machine.codeKeys.length,0);s.tick(10000);assert.equal(s.view.mode,'code');assert.deepEqual(s.sounds,[]);
+  }
+});

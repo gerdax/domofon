@@ -3,18 +3,19 @@ export class Intercom {
   later(fn,ms){const id=this.setTimer(()=>{this.timers.delete(id);fn();},ms);this.timers.add(id);}
   clear(){for(const id of this.timers)this.clearTimer(id);this.timers.clear();}
   show(text,message,calling=false){this.render({text,message,calling,mode:this.mode});}
-  reset(){this.clear();this.stop();this.mode='idle';this.digits='';this.show('door','Domofon gotowy.');}
+  reset(){this.clear();this.stop();this.mode='idle';this.digits='';this.codeKeys=[];this.apartment='';this.show('door','Domofon gotowy.');}
   press(key){
-    if(key==='x'){this.reset();return;}
-    if(key==='key'){this.clear();this.stop();this.mode='code';this.digits='';this.show('----','Wpisz czterocyfrowy kod.');return;}
-    if(!/^\d$/.test(key)||['open','error'].includes(this.mode))return;
-    if(this.mode==='code'){
-      this.digits+=key;this.show('-'.repeat(this.digits.length).padStart(4,' '),`Wpisano ${this.digits.length} cyfr kodu.`);
-      if(this.digits.length===4){const valid=this.digits==='1234';this.mode=valid?'open':'error';this.show(valid?'door':'Err',valid?'Drzwi otwarte.':'Błędny kod.');
+    if(key==='x'){this.reset();return 'x';}
+    if(this.mode==='code'&&(key==='key'||/^\d$/.test(key))){
+      this.codeKeys.push(key);this.show('-'.repeat(this.codeKeys.length).padStart(4,' '),`Wpisano ${this.codeKeys.length} znaków kodu.`);
+      if(this.codeKeys.length===4){const code=this.codeKeys.join('');const valid=code==='1234'||(this.apartment==='6'&&code==='2901');this.mode=valid?'open':'error';this.show(valid?'door':'Err',valid?'Drzwi otwarte.':'Błędny kod.');
         this.later(()=>this.play(valid?'open':'error'),120);this.later(()=>this.reset(),valid?3000:1500);}
-      return;
+      return 'key';
     }
-    if(this.digits.length===4)return;
+    if(key==='key'){const apartment=this.mode==='dialing'?this.digits:'';this.clear();this.stop();this.mode='code';this.apartment=apartment;this.digits='';this.codeKeys=[];this.show('----','Wpisz czterocyfrowy kod.');return 'key';}
+    if(!/^\d$/.test(key)||['open','error'].includes(this.mode))return key;
+    if(this.digits.length===4)return key;
     this.mode='dialing';this.digits+=key;this.show(this.digits,`Numer lokalu: ${this.digits}`);this.clear();
+    return key;
   }
 }
