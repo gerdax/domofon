@@ -39,6 +39,6 @@ let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDef
 if('serviceWorker'in navigator){
   let controlled=!!navigator.serviceWorker.controller,refreshing=false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{const wasControlled=controlled;controlled=true;if(wasControlled&&!refreshing){refreshing=true;location.reload();}});
-  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(()=>navigator.serviceWorker.ready).then(()=>{$('offline-status').textContent='Gotowy do działania offline.';}).catch(()=>{$('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';});
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>{void registration.update().catch(()=>{});return navigator.serviceWorker.ready;}).then(()=>{$('offline-status').textContent='Gotowy do działania offline.';}).catch(()=>{$('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';});
 }
 else $('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';
