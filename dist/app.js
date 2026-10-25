@@ -1,6 +1,6 @@
-import {Sound} from './audio.js?v=9';
-import {Intercom} from './machine.js?v=9';
-import {bindKey} from './input.js?v=9';
+import {Sound} from './audio.js?v=10';
+import {Intercom} from './machine.js?v=10';
+import {bindKey} from './input.js?v=10';
 const $=id=>document.getElementById(id),sound=new Sound();
 // Construct the audio engine ahead of the first tap, but unlock it only in a
 // user gesture, as required by browser autoplay policies.
@@ -22,22 +22,16 @@ function activate(key){const toneKey=machine.press(key);sound.key(toneKey);const
 for(const key of keys){const b=document.createElement('button');b.type='button';b.className='key';b.dataset.key=key;b.setAttribute('aria-label',key==='key'?'Kluczyk — wpisz kod':key==='x'?'Anuluj':key);bindKey(b,()=>activate(key),()=>{if(!sound.muted)void sound.unlock();});$('keypad').append(b);buttons.set(key,b);}
 const held=new Set();
 document.addEventListener('keydown',e=>{
-  if($('help-dialog').open||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
   const key=/^\d$/.test(e.key)?e.key:['Escape','Backspace'].includes(e.key)?'x':e.key==='Enter'?'key':null;
-  if(!key||e.target.closest('.tools'))return;
+  if(!key)return;
   e.preventDefault();if(e.repeat||held.has(e.code))return;held.add(e.code);activate(key);
 });
 document.addEventListener('keyup',e=>held.delete(e.code));
 function suspend(){held.clear();machine.reset();}
 window.addEventListener('blur',()=>held.clear());document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend();});window.addEventListener('pagehide',suspend);
-try{sound.mute(localStorage.getItem('domofon-muted')==='true');}catch{}
-function updateMute(){$('mute').setAttribute('aria-pressed',String(sound.muted));$('mute').setAttribute('aria-label',sound.muted?'Włącz dźwięk':'Wycisz dźwięk');$('mute').textContent=sound.muted?'♩':'♪';}
-updateMute();$('mute').onclick=()=>{sound.mute(!sound.muted);if(!sound.muted)void sound.unlock();updateMute();try{localStorage.setItem('domofon-muted',String(sound.muted));}catch{}};
-$('help').onclick=()=>{suspend();$('help-dialog').showModal();};$('close-help').onclick=()=>$('help-dialog').close();$('help-dialog').addEventListener('click',e=>{if(e.target===$('help-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
-let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('install').hidden=false;});$('install').onclick=async()=>{if(installPrompt){await installPrompt.prompt();installPrompt=null;$('install').hidden=true;}};
 if('serviceWorker'in navigator){
   let controlled=!!navigator.serviceWorker.controller,refreshing=false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{const wasControlled=controlled;controlled=true;if(wasControlled&&!refreshing){refreshing=true;location.reload();}});
-  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>{void registration.update().catch(()=>{});return navigator.serviceWorker.ready;}).then(()=>{$('offline-status').textContent='Gotowy do działania offline.';}).catch(()=>{$('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';});
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>{void registration.update().catch(()=>{});return navigator.serviceWorker.ready;}).catch(()=>{});
 }
-else $('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';

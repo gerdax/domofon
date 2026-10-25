@@ -11,7 +11,7 @@
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
   <link rel="stylesheet" href="./style.css">
-  <script type="module" src="./app.js?v=9"></script>
+  <script type="module" src="./app.js?v=10"></script>
 </head>
 <body>
   <main aria-label="Interaktywny domofon">
@@ -22,20 +22,6 @@
     </div>
     <p id="status" class="sr-only" role="status" aria-live="polite">Domofon gotowy.</p>
   </main>
-  <nav class="tools" aria-label="Opcje">
-    <button id="mute" aria-label="Wycisz dźwięk" aria-pressed="false" title="Dźwięk">♪</button>
-    <button id="help" aria-label="Pomoc" title="Pomoc">?</button>
-  </nav>
-  <dialog id="help-dialog" aria-labelledby="help-title">
-    <button class="close" id="close-help" aria-label="Zamknij pomoc">×</button>
-    <p class="eyebrow">KDC 1905M · SYMULATOR</p>
-    <h1 id="help-title">Kto tam?</h1>
-    <p>Graj na klawiaturze domofonu. Przyciski odtwarzają wybrane nuty, a cyfry zostają na wyświetlaczu. Dzwonienie do lokalu jest na razie wyłączone.</p>
-    <dl><dt>×</dt><dd>Kasuje wpis i anuluje tryb kluczyka.</dd><dt>Kluczyk</dt><dd>Kolejne cztery naciśnięcia grają ton kluczyka. Spróbuj <strong>6 → kluczyk → 2901</strong>, aby otworzyć drzwi. Działa też kod demonstracyjny <strong>1234</strong>.</dd><dt>Klawiatura</dt><dd>Cyfry 0–9, Enter = kluczyk, Escape lub Backspace = ×.</dd></dl>
-    <p class="small">Zainstaluj aplikację z menu przeglądarki. Na iPhonie: Udostępnij → Do ekranu początkowego. Po pierwszej wizycie działa również offline.</p>
-    <button id="install" hidden>Zainstaluj aplikację</button>
-    <p id="offline-status" class="small" role="status">Przygotowywanie wersji offline…</p>
-  </dialog>
   <noscript>Włącz JavaScript, aby korzystać z klawiatury i dźwięków domofonu.</noscript>
 </body>
 </html>
