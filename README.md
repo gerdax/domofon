@@ -16,7 +16,7 @@ W katalogu projektu: `python3 -m http.server 8080 --directory dist`, następnie 
 
 ## PWA
 
-Po pierwszym pełnym załadowaniu aplikacja działa offline. Instaluj z menu przeglądarki; iOS: Udostępnij → Do ekranu początkowego. Service worker wymaga HTTPS lub localhost. Zwiększ wersję cache w `dist/sw.js` przy aktualizacji zasobów. Nowa wersja aktywuje się po zamknięciu dotychczasowych okien aplikacji.
+Po pierwszym pełnym załadowaniu aplikacja działa offline. Instaluj z menu przeglądarki; iOS: Udostępnij → Do ekranu początkowego. Service worker wymaga HTTPS lub localhost. Zwiększ wersję cache w `dist/sw.js` przy aktualizacji zasobów. Aktualizacja aktywuje nowy cache od razu; aplikacja odświeża się przy zmianie kontrolera service workera. W wersjach sprzed tej obsługi należy odświeżyć lub ponownie otworzyć aplikację.
 
 ## GitHub Pages
 
