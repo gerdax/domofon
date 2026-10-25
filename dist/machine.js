@@ -1,5 +1,5 @@
 export class Intercom {
-  constructor({render,play,stop,setTimer=setTimeout,clearTimer=clearTimeout}){Object.assign(this,{render,play,stop,setTimer,clearTimer});this.timers=new Set();this.reset();}
+  constructor({render,play,stop,setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id)}){Object.assign(this,{render,play,stop,setTimer,clearTimer});this.timers=new Set();this.reset();}
   later(fn,ms){const id=this.setTimer(()=>{this.timers.delete(id);fn();},ms);this.timers.add(id);}
   clear(){for(const id of this.timers)this.clearTimer(id);this.timers.clear();}
   show(text,message,calling=false){this.render({text,message,calling,mode:this.mode});}

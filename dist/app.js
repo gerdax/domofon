@@ -37,8 +37,8 @@ updateMute();$('mute').onclick=()=>{sound.mute(!sound.muted);if(!sound.muted)voi
 $('help').onclick=()=>{suspend();$('help-dialog').showModal();};$('close-help').onclick=()=>$('help-dialog').close();$('help-dialog').addEventListener('click',e=>{if(e.target===$('help-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
 let installPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('install').hidden=false;});$('install').onclick=async()=>{if(installPrompt){await installPrompt.prompt();installPrompt=null;$('install').hidden=true;}};
 if('serviceWorker'in navigator){
-  const hadController=!!navigator.serviceWorker.controller;let refreshing=false;
-  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(hadController&&!refreshing){refreshing=true;location.reload();}});
+  let controlled=!!navigator.serviceWorker.controller,refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{const wasControlled=controlled;controlled=true;if(wasControlled&&!refreshing){refreshing=true;location.reload();}});
   navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(()=>navigator.serviceWorker.ready).then(()=>{$('offline-status').textContent='Gotowy do działania offline.';}).catch(()=>{$('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';});
 }
 else $('offline-status').textContent='Tryb offline jest niedostępny w tej przeglądarce.';

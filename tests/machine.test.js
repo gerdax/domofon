@@ -8,3 +8,12 @@ test('X cancels pending calls and active rings',()=>{for(const delay of [100,310
 test('four digit limit and code mode have independent timers',()=>{const s=setup();for(const d of '12345')s.machine.press(d);assert.equal(s.view.text,'1234');s.machine.press('key');s.tick(4000);assert.equal(s.view.mode,'code');for(const d of '1234')s.machine.press(d);assert.equal(s.view.mode,'open');s.tick(120);assert.deepEqual(s.sounds,['open']);s.tick(2880);assert.equal(s.view.mode,'idle');});
 test('wrong code rejects and clears; X cancels delayed confirmation',()=>{const s=setup();s.machine.press('key');for(const d of '9999')s.machine.press(d);assert.equal(s.view.mode,'error');s.tick(120);assert.deepEqual(s.sounds,['error']);s.tick(1380);assert.equal(s.view.mode,'idle');s.machine.press('key');for(const d of '1234')s.machine.press(d);s.machine.reset();s.tick(10000);assert.deepEqual(s.sounds,['error']);});
 test('all 12 tones are distinct and inside requested range',()=>{const values=Object.values(frequencies);assert.equal(values.length,12);assert.equal(new Set(values).size,12);assert.ok(values.every(v=>v>=650&&v<=1800));});
+test('browser timers are called without an Intercom receiver',t=>{
+  let scheduled=0,cleared=0;
+  t.mock.method(globalThis,'setTimeout',function(){assert.equal(this,undefined);scheduled++;return scheduled;});
+  t.mock.method(globalThis,'clearTimeout',function(){assert.equal(this,undefined);cleared++;});
+  const machine=new Intercom({render:()=>{},play:()=>{},stop:()=>{}});
+  machine.press('1');assert.equal(scheduled,1);
+  machine.press('2');assert.equal(scheduled,2);assert.equal(cleared,1);
+  machine.press('x');assert.equal(cleared,2);
+});
